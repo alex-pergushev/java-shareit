@@ -16,6 +16,7 @@ import java.util.Collection;
 public class ItemController {
 
     private final ItemService itemService;
+
     @Autowired
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
@@ -30,7 +31,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto postItem(@Valid @RequestBody ItemDto item,
-                            @RequestHeader("X-Sharer-User-Id") long userId){
+                            @RequestHeader("X-Sharer-User-Id") long userId) {
         return itemService.add(item, userId);
     }
 
