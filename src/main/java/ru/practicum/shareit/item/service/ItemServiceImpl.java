@@ -21,8 +21,6 @@ public class ItemServiceImpl implements ItemService {
     private UserService userService;
     private final Map<Long, Item> items = new HashMap<>();
 
-    private long count = 1;
-
     @Autowired
     public ItemServiceImpl(UserService userService) {
         this.userService = userService;
@@ -32,17 +30,8 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto add(ItemDto item, long userId) {
         User user = userService.get(userId);
 
-        if (item.getAvailable() == null) {
-            throw new ValidationException("Не заполнено поле доступности");
-        }
-        if (item.getName() == null || item.getName().isBlank()) {
-            throw new ValidationException("Не заполнено название вещи");
-        }
-        if (item.getDescription() == null || item.getDescription().isBlank()) {
-            throw new ValidationException("Не заполнено описание вещи");
-        }
+        validateFieldItem(item);
 
-        item.setId(count++);
         Item addItem = ItemMapper.toItem(item);
         addItem.setOwner(user);
         items.put(addItem.getId(), addItem);
@@ -103,5 +92,17 @@ public class ItemServiceImpl implements ItemService {
             }
         }
         return result;
+    }
+
+    void validateFieldItem(ItemDto item) {
+        if (item.getAvailable() == null) {
+            throw new ValidationException("Не заполнено поле доступности");
+        }
+        if (item.getName() == null || item.getName().isBlank()) {
+            throw new ValidationException("Не заполнено название вещи");
+        }
+        if (item.getDescription() == null || item.getDescription().isBlank()) {
+            throw new ValidationException("Не заполнено описание вещи");
+        }
     }
 }

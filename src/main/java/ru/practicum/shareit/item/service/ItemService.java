@@ -9,12 +9,15 @@ public interface ItemService {
     /**
      * Добавление новой вещи
      * @param item вещь
+     * @param userId идентификатор пользователя владельца вещи
      */
     ItemDto add(ItemDto item, long userId);
 
     /**
      * Редактирование вещи
      * @param item вещь
+     * @param itemId идентификатор вещи
+     * @param userId идентификатор пользователя владельца вещи
      */
     ItemDto update(ItemDto item, Long itemId, long userId);
 
@@ -27,7 +30,7 @@ public interface ItemService {
 
     /**
      * Получение владельцем всех его вещей
-     * @param ownerId владелиц
+     * @param ownerId идентификатор владелица
      * @return вещи
      */
     Collection<ItemDto> findAllItemsByOwner(long ownerId);
