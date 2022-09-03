@@ -5,7 +5,7 @@ import ru.practicum.shareit.item.model.Item;
 
 public class ItemMapper {
 
-    static private long count = 1;
+    static long count = 1;
 
     public static ItemDto toItemDto(Item item) {
         return ItemDto.builder()
