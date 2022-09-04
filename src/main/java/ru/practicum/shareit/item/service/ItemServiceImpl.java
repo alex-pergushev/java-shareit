@@ -94,7 +94,7 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
-    void validateFieldItem(ItemDto item) {
+    private void validateFieldItem(ItemDto item) {
         if (item.getAvailable() == null) {
             throw new ValidationException("Не заполнено поле доступности");
         }

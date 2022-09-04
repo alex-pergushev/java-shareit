@@ -30,7 +30,7 @@ public interface ItemService {
 
     /**
      * Получение владельцем всех его вещей
-     * @param ownerId идентификатор владелица
+     * @param ownerId идентификатор владельца
      * @return вещи
      */
     Collection<ItemDto> findAllItemsByOwner(long ownerId);
