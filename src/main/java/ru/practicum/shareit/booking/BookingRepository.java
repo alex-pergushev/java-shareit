@@ -44,8 +44,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query(value = " select count(*) from bookings " +
             "where item_id = :itemId " +
-            "and (start_date between :start_date and :end_date or end_date between :start_date and :end_date) " +
+            "and (start_date between :startDate and :endDate or end_date between :startDate and :endDate) " +
             "and status = 'APPROVED'",
             nativeQuery = true)
-    Long isBooked(Long itemId, Date start_date, Date end_date);
+    Long isBooked(Long itemId, Date startDate, Date endDate);
 }

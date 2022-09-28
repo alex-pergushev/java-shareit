@@ -22,21 +22,21 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             " from (select i.id," +
             " (select max(b.start_date) " +
             " from bookings b " +
-            " where b.start_date < :now_date " +
+            " where b.start_date < :nowDate " +
             " and i.id = b.item_id) last_booking_date from items i) ib " +
             " LEFT JOIN bookings bl ON bl.item_id = ib.id AND bl.start_date = ib.last_booking_date " +
             " where ib.id = :itemId ",
             nativeQuery = true)
-    List<Object[]> findLastBooking(Long itemId, Date now_date);
+    List<Object[]> findLastBooking(Long itemId, Date nowDate);
 
     @Query(value = "select bl.id, bl.booker_id " +
             " from (select i.id," +
             " (select min(b.start_date) " +
             " from bookings b " +
-            " where b.start_date > :now_date and i.id = b.item_id) next_booking_date " +
-            " from items i) ib " +
+            " where b.start_date > :nowDate" +
+            " and i.id = b.item_id) next_booking_date from items i) ib " +
             " LEFT JOIN bookings bl ON bl.item_id = ib.id AND bl.start_date = ib.next_booking_date " +
             " where ib.id = :itemId ",
             nativeQuery = true)
-    List<Object[]> findNextBooking(Long itemId, Date now_date);
+    List<Object[]> findNextBooking(Long itemId, Date nowDate);
 }
