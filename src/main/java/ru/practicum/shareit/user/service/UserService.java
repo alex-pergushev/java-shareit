@@ -18,7 +18,8 @@ public interface UserService {
      * @param userId идентификатор пользователя
      * @return пользователь
      */
-    User get(long userId);
+    UserDto getDto(long userId);
+    User getUser(long userId);
 
     /**
      * Получение всех пользователей
