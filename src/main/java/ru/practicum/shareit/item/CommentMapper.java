@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.UserMapper;
 public class CommentMapper {
 
     public static CommentDto toCommentDto(Comment comment) {
-        if(comment != null) {
+        if (comment != null) {
             return CommentDto.builder()
                     .id(comment.getId())
                     .text(comment.getText())

@@ -27,7 +27,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             " LEFT JOIN bookings bl ON bl.item_id = ib.id AND bl.start_date = ib.last_booking_date " +
             " where ib.id = :itemId ",
             nativeQuery = true)
-    List<Object[]> findLastBooking (Long itemId, Date now_date);
+    List<Object[]> findLastBooking(Long itemId, Date now_date);
 
     @Query(value = "select bl.id, bl.booker_id " +
             " from (select i.id," +
@@ -38,5 +38,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             " LEFT JOIN bookings bl ON bl.item_id = ib.id AND bl.start_date = ib.next_booking_date " +
             " where ib.id = :itemId ",
             nativeQuery = true)
-    List<Object[]> findNextBooking (Long itemId, Date now_date);
+    List<Object[]> findNextBooking(Long itemId, Date now_date);
 }

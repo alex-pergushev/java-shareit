@@ -9,14 +9,16 @@ public interface ItemService {
 
     /**
      * Добавление новой вещи
-     * @param item вещь
+     *
+     * @param item   вещь
      * @param userId идентификатор пользователя владельца вещи
      */
     ItemDto add(ItemDto item, long userId);
 
     /**
      * Редактирование вещи
-     * @param item вещь
+     *
+     * @param item   вещь
      * @param itemId идентификатор вещи
      * @param userId идентификатор пользователя владельца вещи
      */
@@ -24,14 +26,17 @@ public interface ItemService {
 
     /**
      * Просмотр вещи по идентификатору
+     *
      * @param itemId идентификатор вещи
      * @return вещь
      */
     ItemDto getDto(Long itemId, Long userId);
+
     Item getItem(long itemId);
 
     /**
      * Получение владельцем всех его вещей
+     *
      * @param ownerId идентификатор владельца
      * @return вещи
      */
@@ -39,6 +44,7 @@ public interface ItemService {
 
     /**
      * Поиск вещи арендатором по тексту в названии или описании
+     *
      * @param text строка поиска
      * @return найденные вещи
      */

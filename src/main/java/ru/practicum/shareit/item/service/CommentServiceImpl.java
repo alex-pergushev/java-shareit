@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final BookingService bookingService;

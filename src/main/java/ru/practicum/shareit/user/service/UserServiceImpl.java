@@ -56,15 +56,15 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto user) {
         Optional<User> updateUser = null;
 
-        if(user != null && user.getId() != null) {
+        if (user != null && user.getId() != null) {
             updateUser = repository.findById(user.getId());
         }
 
-        if(updateUser.isPresent()) {
-            if(user.getName() != null) {
+        if (updateUser.isPresent()) {
+            if (user.getName() != null) {
                 updateUser.get().setName(user.getName());
             }
-            if(user.getEmail() != null) {
+            if (user.getEmail() != null) {
                 validateEmail(UserMapper.toUser(user));
                 updateUser.get().setEmail(user.getEmail());
             }
