@@ -4,7 +4,6 @@ import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
-import java.util.List;
 
 public interface UserService {
 
