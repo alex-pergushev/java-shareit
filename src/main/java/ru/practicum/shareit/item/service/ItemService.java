@@ -1,44 +1,54 @@
 package ru.practicum.shareit.item.service;
 
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface ItemService {
 
     /**
      * Добавление новой вещи
-     * @param item вещь
+     *
      * @param userId идентификатор пользователя владельца вещи
+     * @param item   вещь
      */
-    ItemDto add(ItemDto item, long userId);
+    ItemDto create(long userId, ItemDto item);
 
     /**
      * Редактирование вещи
-     * @param item вещь
-     * @param itemId идентификатор вещи
-     * @param userId идентификатор пользователя владельца вещи
+     *
+     * @param userId  идентификатор пользователя владельца вещи
+     * @param itemId  идентификатор вещи
+     * @param itemDto вещь
      */
-    ItemDto update(ItemDto item, Long itemId, long userId);
+    ItemDto update(long userId, long itemId, ItemDto itemDto);
 
     /**
      * Просмотр вещи по идентификатору
-     * @param id идентификатор вещи
+     *
+     * @param userId идентификатор пользователя владельца вещи
+     * @param itemId идентификатор вещи
      * @return вещь
      */
-    ItemDto get(long id);
+    ItemDto findById(long userId, long itemId);
 
     /**
      * Получение владельцем всех его вещей
-     * @param ownerId идентификатор владельца
+     *
+     * @param userId идентификатор владельца
      * @return вещи
      */
-    Collection<ItemDto> findAllItemsByOwner(long ownerId);
+    List<ItemDto> findAllById(long userId);
 
     /**
      * Поиск вещи арендатором по тексту в названии или описании
+     *
      * @param text строка поиска
      * @return найденные вещи
      */
-    Collection<ItemDto> search(String text);
+    List<ItemDto> search(String text);
+
+    CommentDtoResponse addComment(long userId, long itemId, CommentDto commentDto);
 }

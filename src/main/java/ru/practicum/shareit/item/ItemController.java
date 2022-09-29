@@ -1,27 +1,25 @@
 package ru.practicum.shareit.item;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exception.ObjectNotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * обработка запросов по вещам
  */
 @RestController
 @RequestMapping("/items")
+@AllArgsConstructor
 public class ItemController {
 
     private final ItemService itemService;
-
-    @Autowired
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
-
 
     /**
      * Добавление новой вещи. На вход поступает объект ItemDto.
@@ -30,9 +28,9 @@ public class ItemController {
      */
 
     @PostMapping
-    public ItemDto postItem(@Valid @RequestBody ItemDto item,
-                            @RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.add(item, userId);
+    public ItemDto create(@RequestHeader("X-Sharer-User-Id") long userId,
+                          @Valid @RequestBody ItemDto item) {
+        return itemService.create(userId, item);
     }
 
     /**
@@ -42,10 +40,10 @@ public class ItemController {
      */
 
     @PatchMapping("/{itemId}")
-    public ItemDto patchItem(@Valid @RequestBody ItemDto item,
-                             @PathVariable Long itemId,
-                             @RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.update(item, itemId, userId);
+    public ItemDto update(@RequestHeader("X-Sharer-User-Id") long userId,
+                          @PathVariable("itemId") long itemId,
+                          @RequestBody ItemDto itemDto) throws ObjectNotFoundException {
+        return itemService.update(userId, itemId, itemDto);
     }
 
     /**
@@ -54,8 +52,9 @@ public class ItemController {
      */
 
     @GetMapping("/{itemId}")
-    public ItemDto findItemById(@PathVariable long itemId) {
-        return itemService.get(itemId);
+    public ItemDto findById(@RequestHeader("X-Sharer-User-Id") long userId,
+                            @PathVariable("itemId") long itemId) throws ObjectNotFoundException {
+        return itemService.findById(userId, itemId);
     }
 
     /**
@@ -63,8 +62,8 @@ public class ItemController {
      * с указанием названия и описания для каждой.
      */
     @GetMapping
-    public Collection<ItemDto> findAllItemsByOwner(@RequestHeader("X-Sharer-User-Id") long ownerId) {
-        return itemService.findAllItemsByOwner(ownerId);
+    public List<ItemDto> findAllById(@RequestHeader("X-Sharer-User-Id") long userId) {
+        return itemService.findAllById(userId);
     }
 
     /**
@@ -75,7 +74,15 @@ public class ItemController {
      */
 
     @GetMapping("/search")
-    public Collection<ItemDto> searchItems(@RequestParam String text) {
+    public List<ItemDto> search(@RequestHeader("X-Sharer-User-Id") long userId,
+                                @RequestParam String text) {
         return itemService.search(text);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDtoResponse addComment(@RequestHeader("X-Sharer-User-Id") long userId,
+                                         @PathVariable("itemId") long itemId,
+                                         @Valid @RequestBody CommentDto commentDto) {
+        return itemService.addComment(userId, itemId, commentDto);
     }
 }

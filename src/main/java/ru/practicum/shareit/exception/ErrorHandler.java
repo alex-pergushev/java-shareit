@@ -1,47 +1,38 @@
 package ru.practicum.shareit.exception;
 
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleEntityAlreadyExistException(final EntityAlreadyExistException e) {
+    @ExceptionHandler({ValidationException.class, MethodArgumentNotValidException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleValidation(final ValidationException e) {
         return new ErrorResponse("error", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleEntityNotFoundException(final EntityNotFoundException e) {
+    public ErrorResponse handleNotFound(final ObjectNotFoundException e) {
         return new ErrorResponse("error", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(ConversionFailedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(final ValidationException e) {
+    public ErrorResponse handleConversionFailedException(final ConversionFailedException e) {
+        return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS", "Unknown state: UNSUPPORTED_STATUS");
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleValidation(final ConflictException e) {
         return new ErrorResponse("error", e.getMessage());
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse handleAccessForbiddenException(final AccessForbiddenException e) {
-        return new ErrorResponse("error", e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConstraintViolationException(final MethodArgumentNotValidException e) {
-        return new ErrorResponse("error", e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleThrowable(final Throwable e) {
-        return new ErrorResponse("error", "Произошла непредвиденная ошибка.");
-    }
 }
