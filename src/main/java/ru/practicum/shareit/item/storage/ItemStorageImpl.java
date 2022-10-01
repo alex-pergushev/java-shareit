@@ -35,7 +35,9 @@ public class ItemStorageImpl implements ItemStorageCustom {
         if (comments.isEmpty()) {
             itemDto.setComments(Collections.emptyList());
         } else {
-            itemDto.setComments(comments.stream().map(CommentMapper::toCommentDtoResponse).collect(Collectors.toList()));
+            itemDto.setComments(comments.stream()
+                                        .map(CommentMapper::toCommentDtoResponse)
+                                        .collect(Collectors.toList()));
         }
         addBookings(userId, itemDto);
         return itemDto;
@@ -55,6 +57,6 @@ public class ItemStorageImpl implements ItemStorageCustom {
     }
 
     private List<BookingForItemDto> getBooking(long itemId) {
-        return bookingRepository.findAllByItem_IdAndStatusOrderByStartAsc(itemId, BookingStatus.APPROVED);
+        return bookingRepository.findAllByItemIdAndStatusOrderByStartAsc(itemId, BookingStatus.APPROVED);
     }
 }

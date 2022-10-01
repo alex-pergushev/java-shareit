@@ -37,36 +37,32 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto create(long userId, ItemDto itemDto) {
-        if (validateOwner(userId)) {
-            Item item = ItemMapper.toItem(itemDto);
-            item.setOwner(userId);
-            return ItemMapper.toItemDto(itemStorage.save(item));
-        }
-        return null;
+        validateOwner(userId);
+        Item item = ItemMapper.toItem(itemDto);
+        item.setOwner(userId);
+        return ItemMapper.toItemDto(itemStorage.save(item));
     }
 
     @Override
     public ItemDto update(long userId, long itemId, ItemDto itemDto) {
-        if (validateOwner(userId)) {
-            Item item = itemStorage.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
-            if (item.getOwner() != userId) {
-                log.debug("Редактирование доступно только для владельца: {}", itemId);
-                throw new ObjectNotFoundException("Редактирование доступно только для владельца.");
-            }
-
-            if (itemDto.getAvailable() != null) {
-                item.setAvailable(itemDto.getAvailable());
-            }
-            if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
-                item.setName(itemDto.getName());
-            }
-            if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
-                item.setDescription(itemDto.getDescription());
-            }
-
-            return ItemMapper.toItemDto(itemStorage.save(item));
+        validateOwner(userId);
+        Item item = itemStorage.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
+        if (item.getOwner() != userId) {
+            log.debug("Редактирование доступно только для владельца: {}", itemId);
+            throw new ObjectNotFoundException("Редактирование доступно только для владельца.");
         }
-        return null;
+
+        if (itemDto.getAvailable() != null) {
+            item.setAvailable(itemDto.getAvailable());
+        }
+        if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
+            item.setName(itemDto.getName());
+        }
+        if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
+            item.setDescription(itemDto.getDescription());
+        }
+
+        return ItemMapper.toItemDto(itemStorage.save(item));
     }
 
     @Override
@@ -76,38 +72,36 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> findAllById(long userId) {
-        if (validateOwner(userId)) {
-            return itemStorage.findIdByOwner(userId).stream().map(id -> itemStorage.getByIdForResponse(userId, id)).collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        validateOwner(userId);
+        return itemStorage.findIdByOwner(userId).stream().map(id -> itemStorage.getByIdForResponse(userId, id))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ItemDto> search(String text) {
-        return text.isBlank() ? Collections.emptyList() : itemStorage.search(text).stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
+        return text.isBlank() ? Collections.emptyList() : itemStorage.search(text).stream().map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public CommentDtoResponse addComment(long userId, long itemId, CommentDto commentDto) {
         Item item = itemStorage.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
-        if (validateOwner(userId)) {
-            List<Booking> booking = bookingRepository.findAllByBooker_IdAndItem_IdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
-            if (booking == null || booking.size() == 0) {
-                log.debug("Пользователь не бронировал вещь: {}", itemId);
-                throw new ValidationException("Пользователь не бронировал вещь.");
-            }
-            Comment comment = Comment.builder()
-                    .author(userStorage.findById(userId).get())
-                    .text(commentDto.getText())
-                    .item(item)
-                    .created(LocalDateTime.now())
-                    .build();
-            return CommentMapper.toCommentDtoResponse(commentRepository.save(comment));
+        validateOwner(userId);
+        List<Booking> booking = bookingRepository.findAllByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
+        if (booking == null || booking.size() == 0) {
+            log.debug("Пользователь не бронировал вещь: {}", itemId);
+            throw new ValidationException("Пользователь не бронировал вещь.");
         }
-        return null;
+        Comment comment = Comment.builder()
+                .author(userStorage.findById(userId).get())
+                .text(commentDto.getText())
+                .item(item)
+                .created(LocalDateTime.now())
+                .build();
+        return CommentMapper.toCommentDtoResponse(commentRepository.save(comment));
     }
 
-    private boolean validateOwner(long userId) {
+    private void validateOwner(long userId) {
         if (userId == 0) {
             log.debug("Не задан владелец.");
             throw new ObjectNotFoundException("Не задан владелец.");
@@ -116,6 +110,5 @@ public class ItemServiceImpl implements ItemService {
             log.debug("Не найден владелец: {}", userId);
             throw new ObjectNotFoundException("Не найден владелец.");
         }
-        return true;
     }
 }
