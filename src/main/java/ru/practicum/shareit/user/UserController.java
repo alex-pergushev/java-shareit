@@ -48,7 +48,8 @@ public class UserController {
      * Обновление пользователя
      */
     @PatchMapping("/{userId}")
-    public UserDto update(@PathVariable("userId") long userId, @RequestBody UserDto user) throws ObjectNotFoundException {
+    public UserDto update(@PathVariable("userId") long userId,
+                          @RequestBody UserDto user) throws ObjectNotFoundException {
         return userService.update(userId, user);
     }
 

@@ -24,16 +24,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll() {
+        log.debug("Поиск всех пользователей");
         return userStorage.findAll().stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 
     @Override
     public UserDto findById(long id) throws ObjectNotFoundException {
-        return UserMapper.toUserDto(userStorage.findById(id).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + id)));
+        log.debug("Поиск пользователя с идентификатором: {}", id);
+        return UserMapper.toUserDto(userStorage.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + id)));
     }
 
     @Override
     public UserDto create(UserDto user) {
+        log.debug("Создание нового пользователя с идентификатором: {}", user.getId());
         return UserMapper.toUserDto(userStorage.save(UserMapper.toUser(user)));
     }
 
@@ -46,11 +50,13 @@ public class UserServiceImpl implements UserService {
         if (userUpdate.getEmail() != null && !userUpdate.getEmail().isBlank()) {
             user.setEmail(userUpdate.getEmail());
         }
+        log.debug("Изменение пользователя с идентификатором: {}", user.getId());
         return UserMapper.toUserDto(userStorage.save(user));
     }
 
     @Override
     public void delete(long userId) throws ObjectNotFoundException {
+        log.debug("Удаление пользователя с идентификатором: {}", userId);
         userStorage.deleteById(userId);
     }
 }

@@ -87,10 +87,12 @@ public class ItemServiceImpl implements ItemService {
     public CommentDtoResponse addComment(long userId, long itemId, CommentDto commentDto) {
         Item item = itemStorage.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
         validateOwner(userId);
-        List<Booking> booking = bookingRepository.findAllByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
+        List<Booking> booking = bookingRepository
+                .findAllByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
         if (booking == null || booking.size() == 0) {
-            log.debug("Пользователь не бронировал вещь: {}", itemId);
-            throw new ValidationException("Пользователь не бронировал вещь.");
+            log.debug("Пользователь с идентификатором {} не бронировал вещь: {}", userId, itemId);
+            throw new ValidationException(String.format(
+                    "Пользователь с идентификатором %d не бронировал вещь.", userId));
         }
         Comment comment = Comment.builder()
                 .author(userStorage.findById(userId).get())
@@ -103,12 +105,12 @@ public class ItemServiceImpl implements ItemService {
 
     private void validateOwner(long userId) {
         if (userId == 0) {
-            log.debug("Не задан владелец.");
-            throw new ObjectNotFoundException("Не задан владелец.");
+            log.debug("Не задан владелец с идентификатором: {}", userId);
+            throw new ObjectNotFoundException(String.format("Не задан владелец с идентификатором: %d.", userId));
         }
         if (userStorage.findById(userId).isEmpty()) {
-            log.debug("Не найден владелец: {}", userId);
-            throw new ObjectNotFoundException("Не найден владелец.");
+            log.debug("Не найден владелец с идентификатором: {}", userId);
+            throw new ObjectNotFoundException(String.format("Не найден владелец с идентификатором: %d.", userId));
         }
     }
 }

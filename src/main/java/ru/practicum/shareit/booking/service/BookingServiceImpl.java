@@ -114,7 +114,8 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, now);
                 break;
             case CURRENT:
-                bookings = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now);
+                bookings = bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(
+                        userId, now, now);
                 break;
             case WAITING:
                 bookings = bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, BookingStatus.WAITING);
@@ -146,13 +147,16 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findAllByItemIdInAndStartAfterOrderByStartDesc(userId, now);
                 break;
             case CURRENT:
-                bookings = bookingRepository.findAllByItemIdInAndStartBeforeAndEndAfterOrderByStartDesc(userId, now, now);
+                bookings = bookingRepository.findAllByItemIdInAndStartBeforeAndEndAfterOrderByStartDesc(
+                        userId, now, now);
                 break;
             case WAITING:
-                bookings = bookingRepository.findAllByItemIdInAndStatusOrderByStartDesc(userId, BookingStatus.WAITING.toString());
+                bookings = bookingRepository.findAllByItemIdInAndStatusOrderByStartDesc(userId,
+                        BookingStatus.WAITING.toString());
                 break;
             case REJECTED:
-                bookings = bookingRepository.findAllByItemIdInAndStatusOrderByStartDesc(userId, BookingStatus.REJECTED.toString());
+                bookings = bookingRepository.findAllByItemIdInAndStatusOrderByStartDesc(userId,
+                        BookingStatus.REJECTED.toString());
         }
         if (bookings.isEmpty()) {
             return Collections.emptyList();

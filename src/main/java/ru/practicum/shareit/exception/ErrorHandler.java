@@ -26,7 +26,8 @@ public class ErrorHandler {
     @ExceptionHandler(ConversionFailedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConversionFailedException(final ConversionFailedException e) {
-        return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS", "Unknown state: UNSUPPORTED_STATUS");
+        return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS",
+                "Unknown state: UNSUPPORTED_STATUS");
     }
 
     @ExceptionHandler(ConflictException.class)

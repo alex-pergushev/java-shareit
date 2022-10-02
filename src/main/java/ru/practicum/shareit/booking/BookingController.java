@@ -44,8 +44,8 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingDtoWithBookerAndItem update(@RequestHeader("X-Sharer-User-Id") long owner,
-                                              @RequestParam("approved") boolean approved,
-                                              @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
+                                          @RequestParam("approved") boolean approved,
+                                          @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
         return bookingService.update(owner, approved, bookingId);
     }
 
@@ -56,7 +56,7 @@ public class BookingController {
      */
     @GetMapping("/{bookingId}")
     public BookingDtoWithBookerAndItem findById(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
+                                           @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
         return bookingService.findById(userId, bookingId);
     }
 
