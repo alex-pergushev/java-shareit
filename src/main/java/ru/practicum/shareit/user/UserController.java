@@ -1,12 +1,12 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * получение запросов по пользователям
@@ -16,7 +16,6 @@ import java.util.Collection;
 public class UserController {
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -25,41 +24,40 @@ public class UserController {
      * Добавление пользователя.
      */
     @PostMapping
-    public UserDto postUser(@Valid @RequestBody UserDto user) {
-        return userService.add(user);
+    public UserDto create(@Valid @RequestBody UserDto user) {
+        return userService.create(user);
     }
 
     /**
      * Получение пользователя
      */
     @GetMapping("/{userId}")
-    public UserDto findUserById(@PathVariable long userId) {
-        return UserMapper.toUserDto(userService.get(userId));
+    public UserDto findById(@PathVariable("userId") long userId) throws ObjectNotFoundException {
+        return userService.findById(userId);
     }
 
     /**
      * Получение всех пользователей
      */
     @GetMapping()
-    public Collection<UserDto> findAllUser() {
-        return userService.getAll();
+    public List<UserDto> findAll() {
+        return userService.findAll();
     }
 
     /**
      * Обновление пользователя
      */
     @PatchMapping("/{userId}")
-    public UserDto patchUser(@Valid @RequestBody UserDto user,
-                             @PathVariable long userId) {
-        user.setId(userId);
-        return userService.update(user);
+    public UserDto update(@PathVariable("userId") long userId,
+                          @RequestBody UserDto user) throws ObjectNotFoundException {
+        return userService.update(userId, user);
     }
 
     /**
      * Удаление пользователя
      */
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable long userId) {
+    public void deleteUser(@PathVariable("userId") long userId) throws ObjectNotFoundException {
         userService.delete(userId);
     }
 }

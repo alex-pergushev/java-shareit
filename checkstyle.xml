@@ -91,7 +91,6 @@
 			<property name="tokens" value="METHOD_REF"/>
 		</module>
 		<module name="PackageName">
-			<!--<property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>-->
 			<message key="name.invalidPattern" value="Package name ''{0}'' must match pattern ''{1}''."/>
 		</module>
 		<module name="TypeName">
@@ -136,7 +135,6 @@
 			<message key="ws.preceded" value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
 			<message key="ws.illegalFollow" value="GenericWhitespace ''{0}'' should followed by whitespace."/>
 		</module>
-		<!-- No trailing whitespace -->
 		<module name="Regexp">
 			<property name="format" value="[ \t]+$"/>
 			<property name="illegalPattern" value="true"/>
@@ -158,14 +156,6 @@
 			<property name="severity" value="ignore"/>
 			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
 		</module>
-<!--		<module name="CustomImportOrder">-->
-<!--			<property name="customImportOrderRules" value="STATIC###STANDARD_JAVA_PACKAGE###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE"/>-->
-<!--			<property name="standardPackageRegExp" value="^java\."/>-->
-<!--			<property name="specialImportsRegExp" value="^javax\."/>-->
-<!--			<property name="thirdPartyPackageRegExp" value="^org\."/>-->
-<!--			<property name="sortImportsInGroupAlphabetically" value="true"/>-->
-<!--			<property name="separateLineBetweenGroups" value="true"/>-->
-<!--		</module>-->
 		<module name="UnusedImports"/>
 		<module name="MethodParamPad"/>
 		<module name="NoWhitespaceBefore">
@@ -248,6 +238,5 @@
 		<module name="SuppressWarningsHolder"/>
 		<module name="SuppressionCommentFilter"/>
 	</module>
-	<!--	<module name="NewlineAtEndOfFile"/>-->
 	<module name="SuppressWarningsFilter"/>
 </module>

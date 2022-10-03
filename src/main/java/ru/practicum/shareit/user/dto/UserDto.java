@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 /**
  * отображение данных о пользователе
@@ -12,9 +13,10 @@ import javax.validation.constraints.Email;
 @Data
 @Builder
 public class UserDto {
-    private Long id;        // уникальный идентификатор пользователя
+    private long id;        // уникальный идентификатор пользователя
     private String name;    // имя или логин пользователя
-    @Email(message = "Некорректный Email")
+    @Email
+    @NotNull
     private String email;   // адрес электронной почты
-                            // (два пользователя не могут иметь одинаковый адрес электронной почты).
+    // (два пользователя не могут иметь одинаковый адрес электронной почты).
 }

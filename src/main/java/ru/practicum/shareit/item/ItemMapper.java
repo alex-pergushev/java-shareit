@@ -5,25 +5,33 @@ import ru.practicum.shareit.item.model.Item;
 
 public class ItemMapper {
 
-    protected static long count = 1;
-
     public static ItemDto toItemDto(Item item) {
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.isAvailable())
-                .request(item.getRequest() != null ? item.getRequest().getId() : null)
-                .build();
+        if (item != null) {
+            return ItemDto.builder()
+                    .id(item.getId())
+                    .name(item.getName())
+                    .description((item.getDescription()))
+                    .available(item.isAvailable())
+                    .owner(item.getOwner())
+                    .request(item.getRequest())
+                    .build();
+        } else {
+            return null;
+        }
     }
 
-    public static Item toItem(ItemDto item) {
-        item.setId(count++);
-        return Item.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
+    public static Item toItem(ItemDto itemDto) {
+        if (itemDto != null) {
+            return Item.builder()
+                    .id(itemDto.getId())
+                    .name(itemDto.getName())
+                    .description((itemDto.getDescription()))
+                    .owner(itemDto.getOwner())
+                    .isAvailable(itemDto.getAvailable())
+                    .request(itemDto.getRequest())
+                    .build();
+        } else {
+            return null;
+        }
     }
 }

@@ -1,94 +1,62 @@
 package ru.practicum.shareit.user.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import ru.practicum.shareit.exception.EntityAlreadyExistException;
-import ru.practicum.shareit.exception.EntityNotFoundException;
-import ru.practicum.shareit.exception.ValidationException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.dto.UserDto;
-import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.storage.UserStorage;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.stream.Collectors;
 
+@Service
 @Slf4j
-@Component
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private Map<Long, User> users = new HashMap<>();
-    private long count = 1;
+    private final UserStorage userStorage;
+    private static final String NOT_FOUND = "Не найден пользователь ";
 
-    @Override
-    public UserDto add(UserDto user) {
-        user.setId(count);
-        User addUser = UserMapper.toUser(user);
-        validateEmail(addUser);
-        users.put(count++, addUser);
-        log.debug("Создан новый пользователь {}", user.getId());
-        return user;
+    public UserServiceImpl(UserStorage userStorage) {
+        this.userStorage = userStorage;
     }
 
     @Override
-    public User get(long userId) {
-        if (users.containsKey(userId)) {
-            return users.get(userId);
-        } else {
-            throw new EntityNotFoundException("Пользователь не найден");
-        }
+    public List<UserDto> findAll() {
+        log.debug("Поиск всех пользователей");
+        return userStorage.findAll().stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 
     @Override
-    public Collection<UserDto> getAll() {
-        List<UserDto> result = new ArrayList<>();
-        for (User user : users.values()) {
-            result.add(UserMapper.toUserDto(user));
-        }
-        return result;
+    public UserDto findById(long id) throws ObjectNotFoundException {
+        log.debug("Поиск пользователя с идентификатором: {}", id);
+        return UserMapper.toUserDto(userStorage.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + id)));
     }
 
     @Override
-    public UserDto update(UserDto user) {
-        User updateUser = null;
-        if (users.containsKey(user.getId())) {
-            updateUser = users.get(user.getId());
-            if (user.getName() != null) {
-                updateUser.setName(user.getName());
-            }
-            if (user.getEmail() != null) {
-                validateEmail(UserMapper.toUser(user));
-                updateUser.setEmail(user.getEmail());
-            }
-        } else {
-            throw new EntityNotFoundException("Попытка обновления несуществующего пользователя");
-        }
-        return UserMapper.toUserDto(updateUser);
+    public UserDto create(UserDto user) {
+        log.debug("Создание нового пользователя с идентификатором: {}", user.getId());
+        return UserMapper.toUserDto(userStorage.save(UserMapper.toUser(user)));
     }
 
     @Override
-    public void delete(long userId) {
-        if (users.containsKey(userId)) {
-            users.remove(userId);
-        } else {
-            throw new EntityNotFoundException("Попытка удаления несуществующего пользователя");
+    public UserDto update(long id, UserDto userUpdate) throws ObjectNotFoundException {
+        User user = userStorage.findById(id).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + id));
+        if (userUpdate.getName() != null && !userUpdate.getName().isBlank()) {
+            user.setName(userUpdate.getName());
         }
+        if (userUpdate.getEmail() != null && !userUpdate.getEmail().isBlank()) {
+            user.setEmail(userUpdate.getEmail());
+        }
+        log.debug("Изменение пользователя с идентификатором: {}", user.getId());
+        return UserMapper.toUserDto(userStorage.save(user));
     }
 
-    private void validateEmail(User user) {
-        if (user.getEmail() == null) {
-            throw new ValidationException("Email не может быть пустым");
-        }
-
-        for (User someUser : users.values()) {
-            if (someUser.getId() != user.getId() && user.getEmail().equals(someUser.getEmail())) {
-                throw new EntityAlreadyExistException(
-                        String.format("Пользователь с Email %s уже существует", user.getEmail()));
-            }
-        }
+    @Override
+    public void delete(long userId) throws ObjectNotFoundException {
+        log.debug("Удаление пользователя с идентификатором: {}", userId);
+        userStorage.deleteById(userId);
     }
 }
