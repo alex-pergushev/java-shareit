@@ -62,8 +62,10 @@ public class ItemController {
      * с указанием названия и описания для каждой.
      */
     @GetMapping
-    public List<ItemDto> findAllById(@RequestHeader("X-Sharer-User-Id") long userId) {
-        return itemService.findAllById(userId);
+    public List<ItemDto> findAllById(@RequestHeader("X-Sharer-User-Id") long userId,
+                                     @RequestParam(required = false, defaultValue = "0") int from,
+                                     @RequestParam(required = false, defaultValue = "20") int size) {
+        return itemService.findAllById(userId, from, size);
     }
 
     /**
@@ -75,8 +77,10 @@ public class ItemController {
 
     @GetMapping("/search")
     public List<ItemDto> search(@RequestHeader("X-Sharer-User-Id") long userId,
-                                @RequestParam String text) {
-        return itemService.search(text);
+                                @RequestParam String text,
+                                @RequestParam(required = false, defaultValue = "0") int from,
+                                @RequestParam(required = false, defaultValue = "20") int size) {
+        return itemService.search(text, from, size);
     }
 
     @PostMapping("/{itemId}/comment")

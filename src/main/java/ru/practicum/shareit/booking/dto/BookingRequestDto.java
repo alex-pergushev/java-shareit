@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingDtoWithBookerAndItem {
+public class BookingRequestDto {
     private long id; //уникальный идентификатор бронирования
     @Future
     private LocalDateTime start;//дата и время начала бронирования;

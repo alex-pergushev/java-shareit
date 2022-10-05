@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -14,9 +16,9 @@ import ru.practicum.shareit.item.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.CommentRepository;
-import ru.practicum.shareit.item.storage.ItemStorage;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.item.dao.CommentRepository;
+import ru.practicum.shareit.item.dao.ItemRepository;
+import ru.practicum.shareit.user.dao.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -29,8 +31,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemStorage itemStorage;
-    private final UserStorage userStorage;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private static final String NOT_FOUND = "Не найден предмет ";
@@ -40,13 +42,13 @@ public class ItemServiceImpl implements ItemService {
         validateOwner(userId);
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(userId);
-        return ItemMapper.toItemDto(itemStorage.save(item));
+        return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
     public ItemDto update(long userId, long itemId, ItemDto itemDto) {
         validateOwner(userId);
-        Item item = itemStorage.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
         if (item.getOwner() != userId) {
             log.debug("Редактирование доступно только для владельца: {}", itemId);
             throw new ObjectNotFoundException("Редактирование доступно только для владельца.");
@@ -62,30 +64,36 @@ public class ItemServiceImpl implements ItemService {
             item.setDescription(itemDto.getDescription());
         }
 
-        return ItemMapper.toItemDto(itemStorage.save(item));
+        return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
     public ItemDto findById(long userId, long itemId) {
-        return itemStorage.getByIdForResponse(userId, itemId);
+        return itemRepository.getByIdForResponse(userId, itemId);
     }
 
     @Override
-    public List<ItemDto> findAllById(long userId) {
+    public List<ItemDto> findAllById(long userId, int from, int size) {
         validateOwner(userId);
-        return itemStorage.findIdByOwner(userId).stream().map(id -> itemStorage.getByIdForResponse(userId, id))
+        checkingPageParameters(from, size);
+        Pageable pageable = PageRequest.of(from / size, size);
+        return itemRepository.findIdByOwner(userId, pageable).stream()
+                .map(id -> itemRepository.getByIdForResponse(userId, id))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ItemDto> search(String text) {
-        return text.isBlank() ? Collections.emptyList() : itemStorage.search(text).stream().map(ItemMapper::toItemDto)
+    public List<ItemDto> search(String text, int from, int size) {
+        checkingPageParameters(from, size);
+        Pageable pageable = PageRequest.of(from / size, size);
+        return text.isBlank() ? Collections.emptyList() : itemRepository.search(text, pageable).stream()
+                .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public CommentDtoResponse addComment(long userId, long itemId, CommentDto commentDto) {
-        Item item = itemStorage.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + itemId));
         validateOwner(userId);
         List<Booking> booking = bookingRepository
                 .findAllByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(userId, itemId, LocalDateTime.now());
@@ -95,7 +103,7 @@ public class ItemServiceImpl implements ItemService {
                     "Пользователь с идентификатором %d не бронировал вещь.", userId));
         }
         Comment comment = Comment.builder()
-                .author(userStorage.findById(userId).get())
+                .author(userRepository.findById(userId).get())
                 .text(commentDto.getText())
                 .item(item)
                 .created(LocalDateTime.now())
@@ -108,9 +116,20 @@ public class ItemServiceImpl implements ItemService {
             log.debug("Не задан владелец с идентификатором: {}", userId);
             throw new ObjectNotFoundException(String.format("Не задан владелец с идентификатором: %d.", userId));
         }
-        if (userStorage.findById(userId).isEmpty()) {
+        if (userRepository.findById(userId).isEmpty()) {
             log.debug("Не найден владелец с идентификатором: {}", userId);
             throw new ObjectNotFoundException(String.format("Не найден владелец с идентификатором: %d.", userId));
+        }
+    }
+
+    private void checkingPageParameters(int from, int size) {
+        if (size <= 0) {
+            log.debug("Количество вещей на странице должно быть больше 0.");
+            throw new ValidationException("Количество вещей на странице должно быть больше 0");
+        }
+        if (from < 0) {
+            log.debug("Индекс первого элемента должен быть больше 0.");
+            throw new ValidationException("Индекс первого элемента должен быть больше 0");
         }
     }
 }

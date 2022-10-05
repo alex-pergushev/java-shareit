@@ -32,11 +32,4 @@ public class User {
     @Column
     private String email;   // адрес электронной почты
     // (два пользователя не могут иметь одинаковый адрес электронной почты).
-
-    public User(User user) {
-        this.id = user.id;
-        this.name = user.name;
-        this.email = user.email;
-    }
-
 }
