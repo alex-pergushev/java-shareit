@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RequestTests {
 
     @Mock
-    ItemRequestService requestService;
+    private ItemRequestService requestService;
     private final ObjectMapper mapper = JsonMapper.builder()
             .addModule(new JavaTimeModule())
             .build();

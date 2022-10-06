@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CommentTest {
 
     @Autowired
-    public JacksonTester<CommentDto> jacksonTester;
+    private JacksonTester<CommentDto> jacksonTester;
     private static CommentDto commentDto = new CommentDto("комментарий");
 
     @Test

@@ -44,7 +44,7 @@ public class ItemRequestTests {
     @Mock
     private UserRepository mockUserRepository;
     @Mock
-    ItemRequestRepository mockItemRequestRepository;
+    private ItemRequestRepository mockItemRequestRepository;
 
     private static ItemRequestService itemRequestService;
     private static User user;
@@ -112,7 +112,7 @@ public class ItemRequestTests {
                 ObjectNotFoundException.class,
                 () -> itemRequestService.create(0L, itemRequestDto)
         );
-        Assertions.assertEquals(exception.getMessage(), "Не задан владелец.");
+        Assertions.assertEquals(exception.getMessage(), "Не задан владелец: 0.");
     }
 
     @Test

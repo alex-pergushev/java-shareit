@@ -75,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> findAllById(long userId, int from, int size) {
         validateOwner(userId);
-        checkingPageParameters(from, size);
+        checkPageParameters(from, size);
         Pageable pageable = PageRequest.of(from / size, size);
         return itemRepository.findIdByOwner(userId, pageable).stream()
                 .map(id -> itemRepository.getByIdForResponse(userId, id))
@@ -84,7 +84,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> search(String text, int from, int size) {
-        checkingPageParameters(from, size);
+        checkPageParameters(from, size);
         Pageable pageable = PageRequest.of(from / size, size);
         return text.isBlank() ? Collections.emptyList() : itemRepository.search(text, pageable).stream()
                 .map(ItemMapper::toItemDto)
@@ -122,7 +122,7 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    private void checkingPageParameters(int from, int size) {
+    private void checkPageParameters(int from, int size) {
         if (size <= 0) {
             log.debug("Количество вещей на странице должно быть больше 0.");
             throw new ValidationException("Количество вещей на странице должно быть больше 0");

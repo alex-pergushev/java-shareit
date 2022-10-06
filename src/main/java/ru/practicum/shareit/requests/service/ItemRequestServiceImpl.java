@@ -66,7 +66,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> getAll(long userId, int from, int size) {
         validateOwner(userId);
-        checkingPageParameters(from, size);
+        checkPageParameters(from, size);
         Pageable pageable = PageRequest.of(from, size, Sort.by("created").descending());
         Page<ItemRequest> pages = requestRepository.findAllByRequestorNot(userId, pageable);
         if (pages.isEmpty()) {
@@ -97,8 +97,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     private void validateOwner(long userId) {
         if (userId == 0) {
-            log.debug("Не задан владелец.");
-            throw new ObjectNotFoundException("Не задан владелец.");
+            log.debug("Не задан владелец: {}", userId);
+            throw new ObjectNotFoundException(String.format("Не задан владелец: %d.", userId));
         }
         if (userRepository.findById(userId).isEmpty()) {
             log.debug("Не найден владелец: {}", userId);
@@ -106,7 +106,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         }
     }
 
-    private void checkingPageParameters(int from, int size) {
+    private void checkPageParameters(int from, int size) {
         if (size <= 0) {
             log.debug("Количество вещей на странице должно быть больше 0");
             throw new ValidationException("Количество вещей на странице должно быть больше 0");

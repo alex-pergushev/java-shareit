@@ -137,10 +137,12 @@ public class BookingTests {
 
     @Test
     void createOwnerIsBooking() {
+        long userId = 1;
         final ObjectNotFoundException exception = Assertions.assertThrows(
                 ObjectNotFoundException.class,
-                () -> bookingService.create(1L, bookingDto));
-        Assertions.assertEquals(exception.getMessage(), "Владелец не может забронировать свою вещь.");
+                () -> bookingService.create(userId, bookingDto));
+        Assertions.assertEquals(exception.getMessage(),
+                String.format("Владелец с идентификатором: %d не может забронировать свою вещь.", userId));
     }
 
     @Test

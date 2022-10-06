@@ -58,11 +58,13 @@ public class BookingServiceImpl implements BookingService {
         }
         if (bookingDto.getStart().isAfter(bookingDto.getEnd())) {
             log.debug("Время окончания бронирования должно быть позже времени начала бронирования.");
-            throw new ValidationException("Время окончания бронирования должно быть позже времени начала бронирования.");
+            throw new ValidationException(
+                    "Время окончания бронирования должно быть позже времени начала бронирования.");
         }
         if (userId == item.getOwner()) {
-            log.debug("Владелец не может забронировать свою вещь.");
-            throw new ObjectNotFoundException("Владелец не может забронировать свою вещь.");
+            log.debug("Владелец с идентификатором: {} не может забронировать свою вещь.", userId);
+            throw new ObjectNotFoundException(String.format(
+                    "Владелец с идентификатором: %d не может забронировать свою вещь.", userId));
         }
     }
 
