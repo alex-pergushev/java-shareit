@@ -103,7 +103,7 @@ public class BookingTests {
     }
 
     @Test
-    void findAllByBookerIdAndEndBefore() {
+    void findAllByBookerIdAndEndBeforeWith0Hours() {
         userRepository.save(userOwner);
         userRepository.save(userBooker);
         item.setOwner(userOwner.getId());
@@ -113,14 +113,24 @@ public class BookingTests {
         Page<Booking> bookings = repository.findAllByBookerIdAndEndBefore(
                 userBooker.getId(), LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
+    }
 
-        bookings = repository.findAllByBookerIdAndEndBefore(
+    @Test
+    void findAllByBookerIdAndEndBeforeWithPlus3Hours() {
+        userRepository.save(userOwner);
+        userRepository.save(userBooker);
+        item.setOwner(userOwner.getId());
+        itemRepository.save(item);
+        repository.save(booking);
+
+        Page<Booking> bookings = repository.findAllByBookerIdAndEndBefore(
                 userBooker.getId(), LocalDateTime.now().plusHours(3), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
+
     @Test
-    void findAllByBookerIdAndStartAfter() {
+    void findAllByBookerIdAndStartAfterWith0Hours() {
         userRepository.save(userOwner);
         userRepository.save(userBooker);
         item.setOwner(userOwner.getId());
@@ -130,8 +140,17 @@ public class BookingTests {
         Page<Booking> bookings = repository.findAllByBookerIdAndStartAfter(
                 userBooker.getId(), LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
+    }
 
-        bookings = repository.findAllByBookerIdAndStartAfter(
+    @Test
+    void findAllByBookerIdAndStartAfterWithMinus3Hours() {
+        userRepository.save(userOwner);
+        userRepository.save(userBooker);
+        item.setOwner(userOwner.getId());
+        itemRepository.save(item);
+        repository.save(booking);
+
+        Page<Booking> bookings = repository.findAllByBookerIdAndStartAfter(
                 userBooker.getId(), LocalDateTime.now().minusHours(3), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
@@ -150,7 +169,7 @@ public class BookingTests {
     }
 
     @Test
-    void findAllByBookerIdAndStatus() {
+    void findAllByBookerIdAndStatusWithREJECTED() {
         userRepository.save(userOwner);
         userRepository.save(userBooker);
         item.setOwner(userOwner.getId());
@@ -160,14 +179,23 @@ public class BookingTests {
         Page<Booking> bookings = repository.findAllByBookerIdAndStatus(
                 userBooker.getId(), BookingStatus.REJECTED, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
+    }
 
-        bookings = repository.findAllByBookerIdAndStatus(
+    @Test
+    void findAllByBookerIdAndStatusWithWAITING() {
+        userRepository.save(userOwner);
+        userRepository.save(userBooker);
+        item.setOwner(userOwner.getId());
+        itemRepository.save(item);
+        repository.save(booking);
+
+        Page<Booking> bookings = repository.findAllByBookerIdAndStatus(
                 userBooker.getId(), BookingStatus.WAITING, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
-    void findAllByItemIdIn() {
+    void findAllByItemIdInWithOwner() {
         userRepository.save(userOwner);
         userRepository.save(userBooker);
         item.setOwner(userOwner.getId());
@@ -176,13 +204,22 @@ public class BookingTests {
 
         Page<Booking> bookings = repository.findAllByItemIdIn(userOwner.getId(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
+    }
 
-        bookings = repository.findAllByItemIdIn(userBooker.getId(), Pageable.unpaged());
+    @Test
+    void findAllByItemIdInWithBooker() {
+        userRepository.save(userOwner);
+        userRepository.save(userBooker);
+        item.setOwner(userOwner.getId());
+        itemRepository.save(item);
+        repository.save(booking);
+
+        Page<Booking> bookings = repository.findAllByItemIdIn(userBooker.getId(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
     }
 
     @Test
-    void findAllByItemIdInAndEndBefore() {
+    void findAllByItemIdInAndEndBeforeWith0Hour() {
         userRepository.save(userOwner);
         userRepository.save(userBooker);
         item.setOwner(userOwner.getId());
@@ -192,14 +229,23 @@ public class BookingTests {
         Page<Booking> bookings = repository.findAllByItemIdInAndEndBefore(
                 userOwner.getId(), LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
+    }
 
-        bookings = repository.findAllByItemIdInAndEndBefore(
+    @Test
+    void findAllByItemIdInAndEndBeforeWith3Hour() {
+        userRepository.save(userOwner);
+        userRepository.save(userBooker);
+        item.setOwner(userOwner.getId());
+        itemRepository.save(item);
+        repository.save(booking);
+
+        Page<Booking> bookings = repository.findAllByItemIdInAndEndBefore(
                 userOwner.getId(), LocalDateTime.now().plusHours(3), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
 
     @Test
-    void findAllByItemIdInAndStartAfter() {
+    void findAllByItemIdInAndStartAfterWith0Hour() {
         userRepository.save(userOwner);
         userRepository.save(userBooker);
         item.setOwner(userOwner.getId());
@@ -209,8 +255,17 @@ public class BookingTests {
         Page<Booking> bookings = repository.findAllByItemIdInAndStartAfter(
                 userOwner.getId(), LocalDateTime.now(), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
+    }
 
-        bookings = repository.findAllByItemIdInAndStartAfter(
+    @Test
+    void findAllByItemIdInAndStartAfterWithMinus3Hour() {
+        userRepository.save(userOwner);
+        userRepository.save(userBooker);
+        item.setOwner(userOwner.getId());
+        itemRepository.save(item);
+        repository.save(booking);
+
+        Page<Booking> bookings = repository.findAllByItemIdInAndStartAfter(
                 userOwner.getId(), LocalDateTime.now().minusHours(3), Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }
@@ -229,7 +284,7 @@ public class BookingTests {
     }
 
     @Test
-    void findAllByItemIdInAndStatus() {
+    void findAllByItemIdInAndStatusWithREJECTED() {
         userRepository.save(userOwner);
         userRepository.save(userBooker);
         item.setOwner(userOwner.getId());
@@ -239,8 +294,17 @@ public class BookingTests {
         Page<Booking> bookings = repository.findAllByItemIdInAndStatus(
                 userOwner.getId(), BookingStatus.REJECTED, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 0);
+    }
 
-        bookings = repository.findAllByItemIdInAndStatus(
+    @Test
+    void findAllByItemIdInAndStatusWithWAITING() {
+        userRepository.save(userOwner);
+        userRepository.save(userBooker);
+        item.setOwner(userOwner.getId());
+        itemRepository.save(item);
+        repository.save(booking);
+
+        Page<Booking> bookings = repository.findAllByItemIdInAndStatus(
                 userOwner.getId(), BookingStatus.WAITING, Pageable.unpaged());
         Assertions.assertEquals(bookings.getSize(), 1);
     }

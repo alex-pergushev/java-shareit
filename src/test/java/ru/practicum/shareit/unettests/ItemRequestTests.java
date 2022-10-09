@@ -184,8 +184,11 @@ public class ItemRequestTests {
     void mapperToRequestDto() {
         ItemRequestDto getRequestDto = RequestMapper.toRequestDto(itemRequest);
         Assertions.assertEquals(getRequestDto.getId(), itemRequest.getId());
+    }
 
-        getRequestDto = RequestMapper.toRequestDto(null);
+    @Test
+    void mapperToRequestDtoNull() {
+        ItemRequestDto getRequestDto = RequestMapper.toRequestDto(null);
         Assertions.assertNull(getRequestDto);
     }
 }

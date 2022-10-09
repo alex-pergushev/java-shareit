@@ -238,14 +238,17 @@ public class ItemTest {
     }
 
     @Test
-    void searchPageParametersFail() {
+    void searchPageParametersFailIndex() {
         final ValidationException exception = Assertions.assertThrows(
                 ValidationException.class,
                 () -> itemService.search("1", -1, 20)
         );
         Assertions.assertEquals(
                 exception.getMessage(), "Индекс первого элемента должен быть больше 0");
+    }
 
+    @Test
+    void searchPageParametersFailSize() {
         final ValidationException exceptionAnother = Assertions.assertThrows(
                 ValidationException.class,
                 () -> itemService.search("1", 1, 0)

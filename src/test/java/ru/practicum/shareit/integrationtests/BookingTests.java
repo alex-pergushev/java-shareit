@@ -141,7 +141,7 @@ public class BookingTests {
     }
 
     @Test
-    void findAllById() {
+    void findAllByIdWithBookingStateALL() {
         UserDto userOwnerDto = userService.create(userOwner);
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
@@ -153,30 +153,85 @@ public class BookingTests {
         List<BookingRequestDto> bookings = bookingService
                 .findAllById(userBookerDto.getId(), BookingState.ALL, 1, 10);
         assertThat(bookings.size(), equalTo(1));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByIdWithBookingStateWAITING() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllById(userBookerDto.getId(), BookingState.WAITING, 1, 10);
         assertThat(bookings.size(), equalTo(1));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByIdWithBookingStateREJECTED() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllById(userBookerDto.getId(), BookingState.REJECTED, 1, 10);
         assertThat(bookings.size(), equalTo(0));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByIdWithBookingStatePAST() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllById(userBookerDto.getId(), BookingState.PAST, 1, 10);
         assertThat(bookings.size(), equalTo(0));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByIdWithBookingStateCURRENT() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllById(userBookerDto.getId(), BookingState.CURRENT, 1, 10);
         assertThat(bookings.size(), equalTo(1));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByIdWithBookingStateFUTURE() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllById(userBookerDto.getId(), BookingState.FUTURE, 1, 10);
         assertThat(bookings.size(), equalTo(0));
     }
 
     @Test
-    void findAllByOwner() {
+    void findAllByOwnerWithBookingStateAll() {
         UserDto userOwnerDto = userService.create(userOwner);
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
@@ -188,24 +243,79 @@ public class BookingTests {
         List<BookingRequestDto> bookings = bookingService
                 .findAllByOwner(userOwnerDto.getId(), BookingState.ALL, 1, 10);
         assertThat(bookings.size(), equalTo(1));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByOwnerWithBookingStateWAITING() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllByOwner(userOwnerDto.getId(), BookingState.WAITING, 1, 10);
         assertThat(bookings.size(), equalTo(1));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByOwnerWithBookingStateREJECTED() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllByOwner(userOwnerDto.getId(), BookingState.REJECTED, 1, 10);
         assertThat(bookings.size(), equalTo(0));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByOwnerWithBookingStatePAST() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllByOwner(userOwnerDto.getId(), BookingState.PAST, 1, 10);
         assertThat(bookings.size(), equalTo(0));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByOwnerWithBookingStateCURRENT() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllByOwner(userOwnerDto.getId(), BookingState.CURRENT, 1, 10);
         assertThat(bookings.size(), equalTo(1));
+    }
 
-        bookings = bookingService
+    @Test
+    void findAllByOwnerWithBookingStateFUTURE() {
+        UserDto userOwnerDto = userService.create(userOwner);
+        UserDto userBookerDto = userService.create(userBooker);
+        itemDto.setOwner(userOwnerDto.getId());
+        ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
+        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setItemId(getItem.getId());
+        BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
+
+        List<BookingRequestDto> bookings = bookingService
                 .findAllByOwner(userOwnerDto.getId(), BookingState.FUTURE, 1, 10);
         assertThat(bookings.size(), equalTo(0));
     }
