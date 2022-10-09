@@ -198,7 +198,7 @@ public class ItemTest {
     }
 
     @Test
-    void findAllByIdPageParametersFail() {
+    void findAllByIdPageParametersFailIndex() {
         Mockito
                 .when(mockUserRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(user));
@@ -208,7 +208,13 @@ public class ItemTest {
         );
         Assertions.assertEquals(
                 exception.getMessage(), "Индекс первого элемента должен быть больше 0");
+    }
 
+    @Test
+    void findAllByIdPageParametersFailSize() {
+        Mockito
+                .when(mockUserRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(user));
         final ValidationException exceptionAnother = Assertions.assertThrows(
                 ValidationException.class,
                 () -> itemService.findAllById(1, 1, 0)
@@ -307,17 +313,27 @@ public class ItemTest {
     void mapperToItem() {
         Item getItem = ItemMapper.toItem(itemDto);
         Assertions.assertEquals(getItem.getName(), itemDto.getName());
+    }
 
-        getItem = ItemMapper.toItem(null);
+    @Test
+    void mapperToItemNull() {
+        Item getItem = ItemMapper.toItem(null);
         Assertions.assertNull(getItem);
     }
+
+
 
     @Test
     void mapperToItemDto() {
         ItemDto getItemDto = ItemMapper.toItemDto(item);
         Assertions.assertEquals(getItemDto.getName(), item.getName());
+    }
 
-        getItemDto = ItemMapper.toItemDto(null);
+    @Test
+    void mapperToItemDtoNull() {
+        ItemDto getItemDto = ItemMapper.toItemDto(null);
         Assertions.assertNull(getItemDto);
     }
+
+
 }

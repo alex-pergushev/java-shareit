@@ -164,14 +164,17 @@ public class ItemRequestTests {
     }
 
     @Test
-    void getAllFailParametersPage() {
+    void getAllFailIndexParametersPage() {
         final ValidationException exception = Assertions.assertThrows(
                 ValidationException.class,
                 () -> itemRequestService.getAll(1L, -1, 10)
         );
         Assertions.assertEquals(exception.getMessage(),
                 "Индекс первого элемента должен быть больше 0");
+    }
 
+    @Test
+    void getAllFailSizeParametersPage() {
         final ValidationException exceptionAnother = Assertions.assertThrows(
                 ValidationException.class,
                 () -> itemRequestService.getAll(1L, 1, 0)

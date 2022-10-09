@@ -122,7 +122,11 @@ public class UserTests {
         Assertions.assertEquals(getUser.getName(), userDto.getName());
         Assertions.assertEquals(getUser.getEmail(), userDto.getEmail());
         Assertions.assertEquals(getUser.getId(), userDto.getId());
-        getUser = UserMapper.toUser(null);
+    }
+
+    @Test
+    void mapperToUserNull() {
+        User getUser = UserMapper.toUser(null);
         Assertions.assertNull(getUser);
     }
 
@@ -132,7 +136,13 @@ public class UserTests {
         Assertions.assertEquals(getUserDto.getName(), user.getName());
         Assertions.assertEquals(getUserDto.getEmail(), user.getEmail());
         Assertions.assertEquals(getUserDto.getId(), user.getId());
-        getUserDto = UserMapper.toUserDto(null);
+    }
+
+    @Test
+    void mapperToUserDtoNull() {
+        UserDto getUserDto = UserMapper.toUserDto(null);
         Assertions.assertNull(getUserDto);
     }
+
+
 }

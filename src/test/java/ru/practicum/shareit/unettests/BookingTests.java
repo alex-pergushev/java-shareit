@@ -338,13 +338,16 @@ public class BookingTests {
     }
 
     @Test
-    void getAllFailParametersPage() {
+    void getAllFailIndexParametersPage() {
         final ValidationException exception = Assertions.assertThrows(
                 ValidationException.class,
                 () -> bookingService.findAllByOwner(1L, BookingState.ALL, -1, 10)
         );
         Assertions.assertEquals(exception.getMessage(), "Индекс первого элемента должен быть больше 0");
+    }
 
+    @Test
+    void getAllFailSizeParametersPage() {
         final ValidationException exception2 = Assertions.assertThrows(
                 ValidationException.class,
                 () -> bookingService.findAllByOwner(1L, BookingState.ALL, 1, 0)
@@ -356,8 +359,11 @@ public class BookingTests {
     void mapperToBooking() {
         Booking getBooking = BookingMapper.toBooking(bookingDto);
         Assertions.assertEquals(getBooking.getId(), bookingDto.getId());
+    }
 
-        getBooking = BookingMapper.toBooking(null);
+    @Test
+    void mapperToBookingNull() {
+        Booking getBooking = BookingMapper.toBooking(null);
         Assertions.assertNull(getBooking);
     }
 
@@ -365,8 +371,11 @@ public class BookingTests {
     void mapperToBookingDto() {
         BookingDto getBookingDto = BookingMapper.toBookingDto(booking);
         Assertions.assertEquals(getBookingDto.getId(), booking.getId());
+    }
 
-        getBookingDto = BookingMapper.toBookingDto(null);
+    @Test
+    void mapperToBookingDtoNull() {
+        BookingDto getBookingDto = BookingMapper.toBookingDto(null);
         Assertions.assertNull(getBookingDto);
     }
 
@@ -374,17 +383,27 @@ public class BookingTests {
     void mapperToBookingDtoWithBookerAndItem() {
         BookingRequestDto getBooking = BookingMapper.toBookingDtoWithBookerAndItem(booking);
         Assertions.assertEquals(getBooking.getId(), booking.getId());
+    }
 
-        getBooking = BookingMapper.toBookingDtoWithBookerAndItem(null);
+    @Test
+    void mapperToBookingDtoWithBookerAndItemNull() {
+        BookingRequestDto getBooking = BookingMapper.toBookingDtoWithBookerAndItem(null);
         Assertions.assertNull(getBooking);
     }
+
+
 
     @Test
     void mapperToBookingForItemDto() {
         BookingForItemDto getBooking = BookingMapper.toBookingForItemDto(booking);
         Assertions.assertEquals(getBooking.getId(), booking.getId());
+    }
 
-        getBooking = BookingMapper.toBookingForItemDto(null);
+    @Test
+    void mapperToBookingForItemDtoNull() {
+        BookingForItemDto getBooking = BookingMapper.toBookingForItemDto(null);
         Assertions.assertNull(getBooking);
     }
+
+
 }
