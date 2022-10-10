@@ -39,12 +39,4 @@ public class Item {
     private long request;    //если вещь была создана по запросу другого пользователя,
     // то в этом поле будет храниться ссылка на соответствующий запрос.
 
-    public Item(Item item) {
-        this.id = item.getId();
-        this.name = item.getName();
-        this.description = item.getDescription();
-        this.isAvailable = item.isAvailable();
-        this.owner = item.getOwner();
-        this.request = item.getRequest();
-    }
 }

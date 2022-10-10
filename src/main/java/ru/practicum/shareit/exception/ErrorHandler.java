@@ -29,11 +29,4 @@ public class ErrorHandler {
         return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS",
                 "Unknown state: UNSUPPORTED_STATUS");
     }
-
-    @ExceptionHandler(ConflictException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleValidation(final ConflictException e) {
-        return new ErrorResponse("error", e.getMessage());
-    }
-
 }

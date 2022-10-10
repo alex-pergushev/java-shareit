@@ -2,7 +2,7 @@ package ru.practicum.shareit.booking;
 
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.dto.BookingDtoWithBookerAndItem;
+import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.exception.ObjectNotFoundException;
 
@@ -43,9 +43,9 @@ public class BookingController {
      */
 
     @PatchMapping("/{bookingId}")
-    public BookingDtoWithBookerAndItem update(@RequestHeader("X-Sharer-User-Id") long owner,
-                                          @RequestParam("approved") boolean approved,
-                                          @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
+    public BookingRequestDto update(@RequestHeader("X-Sharer-User-Id") long owner,
+                                    @RequestParam("approved") boolean approved,
+                                    @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
         return bookingService.update(owner, approved, bookingId);
     }
 
@@ -55,8 +55,8 @@ public class BookingController {
      * Эндпоинт — GET /bookings/{bookingId}.
      */
     @GetMapping("/{bookingId}")
-    public BookingDtoWithBookerAndItem findById(@RequestHeader("X-Sharer-User-Id") long userId,
-                                           @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
+    public BookingRequestDto findById(@RequestHeader("X-Sharer-User-Id") long userId,
+                                      @PathVariable("bookingId") long bookingId) throws ObjectNotFoundException {
         return bookingService.findById(userId, bookingId);
     }
 
@@ -73,10 +73,11 @@ public class BookingController {
      * Бронирования должны возвращаться отсортированными по дате от более новых к более старым.
      */
     @GetMapping
-    public List<BookingDtoWithBookerAndItem> findAllById(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                         @RequestParam(required = false, defaultValue = "ALL")
-                                                         BookingState state) throws ObjectNotFoundException {
-        return bookingService.findAllById(userId, state);
+    public List<BookingRequestDto> findAllById(@RequestHeader("X-Sharer-User-Id") long userId,
+                                               @RequestParam(required = false, defaultValue = "ALL") BookingState state,
+                                               @RequestParam(required = false, defaultValue = "0") int from,
+                                               @RequestParam(required = false, defaultValue = "20") int size) throws ObjectNotFoundException {
+        return bookingService.findAllById(userId, state, from, size);
     }
 
     /**
@@ -86,9 +87,10 @@ public class BookingController {
      * Работа параметра state аналогична его работе в предыдущем сценарии.
      */
     @GetMapping("/owner")
-    public List<BookingDtoWithBookerAndItem> findAllByOwner(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                            @RequestParam(required = false, defaultValue = "ALL")
-                                                            BookingState state) throws ObjectNotFoundException {
-        return bookingService.findAllByOwner(userId, state);
+    public List<BookingRequestDto> findAllByOwner(@RequestHeader("X-Sharer-User-Id") long userId,
+                                                  @RequestParam(required = false, defaultValue = "ALL") BookingState state,
+                                                  @RequestParam(required = false, defaultValue = "0") int from,
+                                                  @RequestParam(required = false, defaultValue = "20") int size) throws ObjectNotFoundException {
+        return bookingService.findAllByOwner(userId, state, from, size);
     }
 }

@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.storage;
+package ru.practicum.shareit.item.dao;
 
 import org.springframework.context.annotation.Lazy;
 import ru.practicum.shareit.booking.BookingRepository;
@@ -14,24 +14,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ItemStorageImpl implements ItemStorageCustom {
+public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final ItemStorage itemStorage;
+    private final ItemRepository itemRepository;
 
-    public ItemStorageImpl(@Lazy BookingRepository bookingRepository, @Lazy CommentRepository commentRepository,
-                           @Lazy ItemStorage itemStorage) {
+    public ItemRepositoryImpl(@Lazy BookingRepository bookingRepository,
+                              @Lazy CommentRepository commentRepository,
+                              @Lazy ItemRepository itemRepository) {
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
-        this.itemStorage = itemStorage;
+        this.itemRepository = itemRepository;
     }
 
     @Override
     public ItemDto getByIdForResponse(long userId, long id) {
-        ItemDto itemDto = ItemMapper.toItemDto(itemStorage.findById(id).orElseThrow(() ->
+        ItemDto itemDto = ItemMapper.toItemDto(itemRepository.findById(id).orElseThrow(() ->
                 new ObjectNotFoundException("Не найден предмет " + id)));
-        List<Comment> comments = commentRepository.findAllByItem_Id(id);
+        List<Comment> comments = commentRepository.findAllByItemId(id);
         if (comments.isEmpty()) {
             itemDto.setComments(Collections.emptyList());
         } else {
@@ -57,6 +58,6 @@ public class ItemStorageImpl implements ItemStorageCustom {
     }
 
     private List<BookingForItemDto> getBooking(long itemId) {
-        return bookingRepository.findAllByItemIdAndStatusOrderByStartAsc(itemId, BookingStatus.APPROVED);
+        return bookingRepository.findAllByItemIdAndStatus(itemId, BookingStatus.APPROVED);
     }
 }

@@ -40,7 +40,7 @@ public interface ItemService {
      * @param userId идентификатор владельца
      * @return вещи
      */
-    List<ItemDto> findAllById(long userId);
+    List<ItemDto> findAllById(long userId, int from, int size);
 
     /**
      * Поиск вещи арендатором по тексту в названии или описании
@@ -48,7 +48,7 @@ public interface ItemService {
      * @param text строка поиска
      * @return найденные вещи
      */
-    List<ItemDto> search(String text);
+    List<ItemDto> search(String text, int from, int size);
 
     CommentDtoResponse addComment(long userId, long itemId, CommentDto commentDto);
 }
