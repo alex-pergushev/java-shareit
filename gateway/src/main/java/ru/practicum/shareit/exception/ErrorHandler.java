@@ -23,9 +23,9 @@ public class ErrorHandler {
         return new ErrorResponse("error", e.getMessage());
     }
 
-    @ExceptionHandler(ConversionFailedException.class)
+    @ExceptionHandler({ConversionFailedException.class, IllegalArgumentException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConversionFailedException(final ConversionFailedException e) {
+    public ErrorResponse handleConversionFailedException(final IllegalArgumentException e) {
         return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS",
                 "Unknown state: UNSUPPORTED_STATUS");
     }

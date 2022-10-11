@@ -1,4 +1,4 @@
-package ru.practicum.shareit.unettests;
+package ru.practicum.shareit.unittests;
 
 
 import lombok.RequiredArgsConstructor;
