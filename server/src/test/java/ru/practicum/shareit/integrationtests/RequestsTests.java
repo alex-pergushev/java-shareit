@@ -63,7 +63,7 @@ public class RequestsTests {
     }
 
     @AfterEach
-    @Sql({"/clean.sql"})
+    @Sql({"/test/resources/clean.sql"})
     void clean() {
     }
 

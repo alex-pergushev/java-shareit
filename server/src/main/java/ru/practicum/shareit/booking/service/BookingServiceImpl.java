@@ -56,11 +56,6 @@ public class BookingServiceImpl implements BookingService {
             log.debug("Вещь не доступна для бронирования.");
             throw new ValidationException("Вещь не доступна для бронирования.");
         }
-        if (bookingDto.getStart().isAfter(bookingDto.getEnd())) {
-            log.debug("Время окончания бронирования должно быть позже времени начала бронирования.");
-            throw new ValidationException(
-                    "Время окончания бронирования должно быть позже времени начала бронирования.");
-        }
         if (userId == item.getOwner()) {
             log.debug("Владелец с идентификатором: {} не может забронировать свою вещь.", userId);
             throw new ObjectNotFoundException(String.format(
@@ -107,7 +102,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingRequestDto> findAllById(long userId, BookingState state, int from, int size) {
-        checkingPageParameters(from, size);
         User user = getUser(userId);               //проверка на существование пользователя
         Page<Booking> bookings = Page.empty();
         LocalDateTime now = LocalDateTime.now();
@@ -142,7 +136,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingRequestDto> findAllByOwner(long userId, BookingState state, int from, int size) {
-        checkingPageParameters(from, size);
         User user = getUser(userId);
         Page<Booking> bookings = Page.empty();
         LocalDateTime now = LocalDateTime.now();
@@ -187,14 +180,4 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(NOT_FOUND + id));
     }
 
-    private void checkingPageParameters(int from, int size) {
-        if (size <= 0) {
-            log.debug("Количество вещей на странице должно быть больше 0");
-            throw new ValidationException("Количество вещей на странице должно быть больше 0");
-        }
-        if (from < 0) {
-            log.debug("Индекс первого элемента должен быть больше 0");
-            throw new ValidationException("Индекс первого элемента должен быть больше 0");
-        }
-    }
 }

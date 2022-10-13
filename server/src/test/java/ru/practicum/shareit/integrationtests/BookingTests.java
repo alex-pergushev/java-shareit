@@ -77,7 +77,7 @@ public class BookingTests {
     }
 
     @AfterEach
-    @Sql({"/clean.sql"})
+    @Sql({"/test/resources/clean.sql"})
     void clean() {
     }
 
@@ -141,7 +141,7 @@ public class BookingTests {
     }
 
     @Test
-    void findAllByIdWithBookingStateALL() {
+    void findAllByIdfindAllByIdWithBookingStateAll() {
         UserDto userOwnerDto = userService.create(userOwner);
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());

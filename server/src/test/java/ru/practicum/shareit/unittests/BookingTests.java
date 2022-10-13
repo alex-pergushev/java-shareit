@@ -126,16 +126,6 @@ public class BookingTests {
     }
 
     @Test
-    void createFailDate() {
-        bookingDto.setEnd(start.minusDays(1));
-        final ValidationException exception = Assertions.assertThrows(
-                ValidationException.class,
-                () -> bookingService.create(2L, bookingDto));
-        Assertions.assertEquals(exception.getMessage(),
-                "Время окончания бронирования должно быть позже времени начала бронирования.");
-    }
-
-    @Test
     void createOwnerIsBooking() {
         long userId = 1;
         final ObjectNotFoundException exception = Assertions.assertThrows(
@@ -338,24 +328,6 @@ public class BookingTests {
     }
 
     @Test
-    void getAllFailIndexParametersPage() {
-        final ValidationException exception = Assertions.assertThrows(
-                ValidationException.class,
-                () -> bookingService.findAllByOwner(1L, BookingState.ALL, -1, 10)
-        );
-        Assertions.assertEquals(exception.getMessage(), "Индекс первого элемента должен быть больше 0");
-    }
-
-    @Test
-    void getAllFailSizeParametersPage() {
-        final ValidationException exception2 = Assertions.assertThrows(
-                ValidationException.class,
-                () -> bookingService.findAllByOwner(1L, BookingState.ALL, 1, 0)
-        );
-        Assertions.assertEquals(exception2.getMessage(), "Количество вещей на странице должно быть больше 0");
-    }
-
-    @Test
     void mapperToBooking() {
         Booking getBooking = BookingMapper.toBooking(bookingDto);
         Assertions.assertEquals(getBooking.getId(), bookingDto.getId());
@@ -391,8 +363,6 @@ public class BookingTests {
         Assertions.assertNull(getBooking);
     }
 
-
-
     @Test
     void mapperToBookingForItemDto() {
         BookingForItemDto getBooking = BookingMapper.toBookingForItemDto(booking);
@@ -404,6 +374,4 @@ public class BookingTests {
         BookingForItemDto getBooking = BookingMapper.toBookingForItemDto(null);
         Assertions.assertNull(getBooking);
     }
-
-
 }

@@ -75,7 +75,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> findAllById(long userId, int from, int size) {
         validateOwner(userId);
-        checkPageParameters(from, size);
         Pageable pageable = PageRequest.of(from / size, size);
         return itemRepository.findIdByOwner(userId, pageable).stream()
                 .map(id -> itemRepository.getByIdForResponse(userId, id))
@@ -84,7 +83,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> search(String text, int from, int size) {
-        checkPageParameters(from, size);
         Pageable pageable = PageRequest.of(from / size, size);
         return text.isBlank() ? Collections.emptyList() : itemRepository.search(text, pageable).stream()
                 .map(ItemMapper::toItemDto)
@@ -112,24 +110,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void validateOwner(long userId) {
-        if (userId == 0) {
-            log.debug("Не задан владелец с идентификатором: {}", userId);
-            throw new ObjectNotFoundException(String.format("Не задан владелец с идентификатором: %d.", userId));
-        }
         if (userRepository.findById(userId).isEmpty()) {
             log.debug("Не найден владелец с идентификатором: {}", userId);
             throw new ObjectNotFoundException(String.format("Не найден владелец с идентификатором: %d.", userId));
-        }
-    }
-
-    private void checkPageParameters(int from, int size) {
-        if (size <= 0) {
-            log.debug("Количество вещей на странице должно быть больше 0.");
-            throw new ValidationException("Количество вещей на странице должно быть больше 0");
-        }
-        if (from < 0) {
-            log.debug("Индекс первого элемента должен быть больше 0.");
-            throw new ValidationException("Индекс первого элемента должен быть больше 0");
         }
     }
 }

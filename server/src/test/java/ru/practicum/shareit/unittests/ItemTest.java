@@ -64,6 +64,7 @@ public class ItemTest {
             .isAvailable(true)
             .request(0)
             .build();
+
     private static Booking dto = Booking.builder()
             .id(1)
             .start(LocalDateTime.now())
@@ -126,7 +127,7 @@ public class ItemTest {
         Mockito
                 .when(mockItemRepository.save(any(Item.class)))
                 .thenReturn(item);
-        ItemDto getItem = itemService.update(1,1,itemDto);
+        ItemDto getItem = itemService.update(1, 1, itemDto);
         Assertions.assertEquals(getItem.getName(), itemDto.getName());
     }
 
@@ -134,7 +135,7 @@ public class ItemTest {
     void updateUserNotFound() {
         final ObjectNotFoundException exception = Assertions.assertThrows(
                 ObjectNotFoundException.class,
-                () -> itemService.update(1,1, itemDto)
+                () -> itemService.update(1, 1, itemDto)
         );
         Assertions.assertEquals(exception.getMessage(), "Не найден владелец с идентификатором: 1.");
     }
@@ -198,32 +199,6 @@ public class ItemTest {
     }
 
     @Test
-    void findAllByIdPageParametersFailIndex() {
-        Mockito
-                .when(mockUserRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.of(user));
-        final ValidationException exception = Assertions.assertThrows(
-                ValidationException.class,
-                () -> itemService.findAllById(1, -1, 20)
-        );
-        Assertions.assertEquals(
-                exception.getMessage(), "Индекс первого элемента должен быть больше 0");
-    }
-
-    @Test
-    void findAllByIdPageParametersFailSize() {
-        Mockito
-                .when(mockUserRepository.findById(Mockito.anyLong()))
-                .thenReturn(Optional.of(user));
-        final ValidationException exceptionAnother = Assertions.assertThrows(
-                ValidationException.class,
-                () -> itemService.findAllById(1, 1, 0)
-        );
-        Assertions.assertEquals(
-                exceptionAnother.getMessage(), "Количество вещей на странице должно быть больше 0");
-    }
-
-    @Test
     void searchOk() {
         Pageable pageable = PageRequest.of(0, 20);
         Mockito
@@ -241,26 +216,6 @@ public class ItemTest {
                 .thenReturn(new PageImpl<>(List.of(item)));
         List<ItemDto> getItems = itemService.search("", 1, 20);
         Assertions.assertEquals(getItems.size(), 0);
-    }
-
-    @Test
-    void searchPageParametersFailIndex() {
-        final ValidationException exception = Assertions.assertThrows(
-                ValidationException.class,
-                () -> itemService.search("1", -1, 20)
-        );
-        Assertions.assertEquals(
-                exception.getMessage(), "Индекс первого элемента должен быть больше 0");
-    }
-
-    @Test
-    void searchPageParametersFailSize() {
-        final ValidationException exceptionAnother = Assertions.assertThrows(
-                ValidationException.class,
-                () -> itemService.search("1", 1, 0)
-        );
-        Assertions.assertEquals(
-                exceptionAnother.getMessage(), "Количество вещей на странице должно быть больше 0");
     }
 
     @Test
@@ -302,6 +257,7 @@ public class ItemTest {
                 .when(mockBookingRepository.findAllByBookerIdAndItemIdAndEndBeforeOrderByStartDesc(
                         Mockito.anyLong(), Mockito.anyLong(), Mockito.any(LocalDateTime.class)))
                 .thenReturn(Collections.emptyList());
+
         final ValidationException exception = Assertions.assertThrows(
                 ValidationException.class,
                 () -> itemService.addComment(1, 1, new CommentDto("комментарий"))
@@ -321,8 +277,6 @@ public class ItemTest {
         Assertions.assertNull(getItem);
     }
 
-
-
     @Test
     void mapperToItemDto() {
         ItemDto getItemDto = ItemMapper.toItemDto(item);
@@ -334,6 +288,4 @@ public class ItemTest {
         ItemDto getItemDto = ItemMapper.toItemDto(null);
         Assertions.assertNull(getItemDto);
     }
-
-
 }

@@ -53,7 +53,7 @@ public class ItemTests {
     }
 
     @AfterEach
-    @Sql({"/clean.sql"})
+    @Sql({"/test/resources/clean.sql"})
     void clean() {
     }
 

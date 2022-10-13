@@ -159,7 +159,7 @@ public class ItemRequestTests {
         Mockito
                 .when(mockItemRequestRepository.findAllByRequestorNot(Mockito.anyLong(), any(Pageable.class)))
                 .thenReturn(Page.empty());
-        List<ItemRequestDto> dtos = itemRequestService.getAll(1L, 10, 10);
+        List<ItemRequestDto> dtos = itemRequestService.getAll(1L, 1, 10);
         Assertions.assertEquals(dtos.size(), 0);
     }
 

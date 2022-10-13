@@ -143,6 +143,4 @@ public class UserTests {
         UserDto getUserDto = UserMapper.toUserDto(null);
         Assertions.assertNull(getUserDto);
     }
-
-
 }

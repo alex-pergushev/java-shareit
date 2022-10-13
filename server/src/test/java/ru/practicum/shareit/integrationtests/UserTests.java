@@ -43,9 +43,10 @@ public class UserTests {
     }
 
     @AfterEach
-    @Sql({"/clean.sql"})
+    @Sql({"/test/resources/clean.sql"})
     void clean() {
     }
+
 
     @Test
     void saveUser() {
@@ -62,7 +63,7 @@ public class UserTests {
     @Test
     void updateUser() {
         UserDto getUser = userService.create(userDto);
-        getUser.setEmail("peter2@ya.ru");
+        getUser.setEmail("kirill@pergushev.ru");
         userService.update(getUser.getId(), getUser);
 
         TypedQuery<User> query = em.createQuery("Select u from User u where u.id = :id", User.class);
@@ -76,7 +77,7 @@ public class UserTests {
     @Test
     void findAll() {
         userService.create(userDto);
-        userDto.setEmail("peter2@ya.ru");
+        userDto.setEmail("kirill@pergushev.ru");
         userService.create(userDto);
 
         TypedQuery<User> query = em.createQuery("Select u from User u", User.class);
@@ -96,4 +97,5 @@ public class UserTests {
         assertThat(user.getName(), equalTo(userDto.getName()));
         assertThat(user.getEmail(), equalTo(userDto.getEmail()));
     }
+
 }

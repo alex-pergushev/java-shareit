@@ -23,10 +23,12 @@ public class BookingController {
     private final BookingClient bookingClient;
 
     @GetMapping
-    public ResponseEntity<Object> findAllById(@RequestHeader("X-Sharer-User-Id") long userId,
-                                              @RequestParam(name = "state", defaultValue = "all") String stateParam,
-                                              @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                              @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+    public ResponseEntity<Object>
+    findAllById(@RequestHeader("X-Sharer-User-Id") long userId,
+                @RequestParam(name = "state", defaultValue = "all") String stateParam,
+                @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
+                @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+
         BookingState state = BookingState.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
@@ -38,7 +40,8 @@ public class BookingController {
                                          @RequestBody @Valid BookItemRequestDto requestDto) {
         if (requestDto.getStart().isAfter(requestDto.getEnd())) {
             log.debug("Время окончания бронирования должно быть позже времени начала бронирования.");
-            throw new ValidationException("Время окончания бронирования должно быть позже времени начала бронирования.");
+            throw new ValidationException(
+                    "Время окончания бронирования должно быть позже времени начала бронирования.");
         }
         log.info("Creating booking {}, userId={}", requestDto, userId);
         return bookingClient.bookItem(userId, requestDto);
@@ -60,10 +63,12 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> findAllByOwner(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                 @RequestParam(name = "state", defaultValue = "all") String stateParam,
-                                                 @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                                 @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+    public ResponseEntity<Object>
+    findAllByOwner(@RequestHeader("X-Sharer-User-Id") long userId,
+                   @RequestParam(name = "state", defaultValue = "all") String stateParam,
+                   @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
+                   @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+
         BookingState state = BookingState.from(stateParam)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
         log.info("Get booking by Owner with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
