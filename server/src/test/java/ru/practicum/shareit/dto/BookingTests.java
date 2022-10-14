@@ -25,7 +25,7 @@ public class BookingTests {
             .start(now)
             .end(later)
             .itemId(7)
-            .booker(9)
+            .bookerId(9)
             .status(BookingStatus.APPROVED)
             .build();
 
@@ -36,15 +36,15 @@ public class BookingTests {
         assertThat(result).hasJsonPath("$.start");
         assertThat(result).hasJsonPath("$.end");
         assertThat(result).hasJsonPath("$.itemId");
-        assertThat(result).hasJsonPath("$.booker");
+        assertThat(result).hasJsonPath("$.bookerId");
         assertThat(result).hasJsonPath("$.status");
 
         assertThat(result).extractingJsonPathNumberValue("$.id")
                 .isEqualTo((int) dto.getId());
         assertThat(result).extractingJsonPathNumberValue("$.itemId")
                 .isEqualTo((int) dto.getItemId());
-        assertThat(result).extractingJsonPathNumberValue("$.booker")
-                .isEqualTo((int) dto.getBooker());
+        assertThat(result).extractingJsonPathNumberValue("$.bookerId")
+                .isEqualTo((int) dto.getBookerId());
         assertThat(result).extractingJsonPathStringValue("$.status")
                 .isEqualTo(BookingStatus.APPROVED.toString());
     }

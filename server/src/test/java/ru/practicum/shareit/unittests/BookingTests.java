@@ -88,7 +88,7 @@ public class BookingTests {
                 .start(start)
                 .end(end)
                 .itemId(1)
-                .booker(2)
+                .bookerId(2)
                 .status(BookingStatus.WAITING)
                 .build();
         bookingService = new BookingServiceImpl(mockBookingRepository, mockItemRepository, mockUserService);
@@ -110,7 +110,7 @@ public class BookingTests {
                 .thenReturn(booking);
         BookingDto dto = bookingService.create(2L, bookingDto);
         Assertions.assertEquals(dto.getId(), booking.getId());
-        Assertions.assertEquals(dto.getBooker(), booking.getBooker().getId());
+        Assertions.assertEquals(dto.getBookerId(), booking.getBooker().getId());
         Assertions.assertEquals(dto.getItemId(), booking.getItem().getId());
         Assertions.assertEquals(dto.getStart(), booking.getStart());
         Assertions.assertEquals(dto.getEnd(), booking.getEnd());

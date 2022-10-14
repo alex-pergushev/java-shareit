@@ -65,7 +65,7 @@ public class BookingTests {
                 .start(start)
                 .end(end)
                 .itemId(1)
-                .booker(2)
+                .bookerId(2)
                 .status(BookingStatus.WAITING)
                 .build();
 

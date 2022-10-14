@@ -71,7 +71,7 @@ public class BookingTests {
                 .start(start)
                 .end(end)
                 .itemId(1)
-                .booker(2)
+                .bookerId(2)
                 .status(BookingStatus.WAITING)
                 .build();
     }
@@ -87,7 +87,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -106,7 +106,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
         bookingService.update(userOwnerDto.getId(), true, getBooking.getId());
@@ -126,7 +126,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService
                 .create(userBookerDto.getId(), bookingDto);
@@ -146,7 +146,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -161,7 +161,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -176,7 +176,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -191,7 +191,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -206,7 +206,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -221,7 +221,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -236,7 +236,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -251,7 +251,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -266,7 +266,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -281,7 +281,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -296,7 +296,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
@@ -311,7 +311,7 @@ public class BookingTests {
         UserDto userBookerDto = userService.create(userBooker);
         itemDto.setOwner(userOwnerDto.getId());
         ItemDto getItem = itemService.create(userOwnerDto.getId(), itemDto);
-        bookingDto.setBooker(userBookerDto.getId());
+        bookingDto.setBookerId(userBookerDto.getId());
         bookingDto.setItemId(getItem.getId());
         BookingDto getBooking = bookingService.create(userBookerDto.getId(), bookingDto);
 
