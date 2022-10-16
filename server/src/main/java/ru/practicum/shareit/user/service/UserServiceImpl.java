@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto user) {
-        //log.debug("Создание нового пользователя с идентификатором: {}", user.getId());
+        log.debug("Создание нового пользователя с идентификатором: {}", user.getId());
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(user)));
     }
 

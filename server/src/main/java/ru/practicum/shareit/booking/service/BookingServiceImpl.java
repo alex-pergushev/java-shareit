@@ -42,7 +42,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto create(Long userId, BookingDto bookingDto) {
         User user = getUser(userId);               //проверка на существование пользователя
         Item item = getItem(bookingDto.getItemId()); //проверка на существование вещи
-        validateItem(userId, bookingDto, item);
+        validateItem(userId, item);
 
         Booking booking = BookingMapper.toBooking(bookingDto);
         booking.setStatus(BookingStatus.WAITING);
@@ -51,7 +51,7 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toBookingDto(bookingRepository.save(booking));
     }
 
-    private void validateItem(Long userId, BookingDto bookingDto, Item item) {
+    private void validateItem(Long userId, Item item) {
         if (!item.isAvailable()) {
             log.debug("Вещь не доступна для бронирования.");
             throw new ValidationException("Вещь не доступна для бронирования.");
